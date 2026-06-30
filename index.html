@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Gatework — Logic Circuit Simulator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo"><div class="dot"></div><h1>GATE<span>WORK</span></h1></div>
+  <div class="toolbar">
+    <button id="btnSimulate" class="primary">▶ Simulate</button>
+    <button id="btnTruth">Truth Table</button>
+    <button id="btnExpr">Expression</button>
+    <button id="btnIdentify">Identify Gate</button>
+    <button id="btnSave">💾 Save</button>
+    <button id="btnExport">Export JSON</button>
+    <button id="btnImport">Import JSON</button>
+    <input type="file" id="fileImport" accept=".json" style="display:none">
+    <button id="btnClear" class="danger">Clear All</button>
+  </div>
+</header>
+
+<div class="layout">
+  <div class="palette">
+    <h3>Input / Output</h3>
+    <div class="gate-btn" data-type="INPUT">INPUT <small>src</small></div>
+    <div class="gate-btn" data-type="OUTPUT">OUTPUT <small>sink</small></div>
+    <h3>Gates</h3>
+    <div class="gate-btn" data-type="AND">AND <small>∧</small></div>
+    <div class="gate-btn" data-type="OR">OR <small>∨</small></div>
+    <div class="gate-btn" data-type="NOT">NOT <small>¬</small></div>
+    <div class="gate-btn" data-type="NAND">NAND <small>⊼</small></div>
+    <div class="gate-btn" data-type="NOR">NOR <small>⊽</small></div>
+    <div class="gate-btn" data-type="XOR">XOR <small>⊕</small></div>
+    <div class="gate-btn" data-type="XNOR">XNOR <small>⊙</small></div>
+    <div class="gate-btn" data-type="BUFFER">BUFFER <small>—</small></div>
+    <h3 style="margin-top:20px;">How to use</h3>
+    <p class="hint">Click a gate to drop it on the board. Drag nodes to move. Click an output pin (right) then an input pin (left) to wire them. Toggle INPUT nodes to set values, then hit Simulate. Use "Identify Gate" to see what your combined circuit is equivalent to.</p>
+    <h3>Saved Circuits</h3>
+    <div id="savedList"><p class="empty-note">Nothing saved yet.</p></div>
+  </div>
+
+  <div class="canvas-wrap">
+    <div id="canvas">
+      <svg id="wires" width="2200" height="1400"></svg>
+    </div>
+  </div>
+
+  <div class="sidepanel">
+    <h3>Status</h3>
+    <p class="hint" id="statusText">Build a circuit, then run Simulate.</p>
+    <h3>Equivalent Gate</h3>
+    <div class="expr-box" id="identifyBox">—</div>
+    <h3>Boolean Expression</h3>
+    <div class="expr-box" id="exprBox">—</div>
+    <h3>Truth Table</h3>
+    <div id="truthBox"><p class="empty-note">No outputs yet.</p></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
