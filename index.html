@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Gatework — Logic Circuit Simulator</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Gatework — Logic Circuit Simulator</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -13,7 +13,7 @@
     <button id="btnSimulate" class="primary">▶ Simulate</button>
     <button id="btnTruth">Truth Table</button>
     <button id="btnExpr">Expression</button>
-    <button id="btnIdentify">Identify Gate</button>
+    <button id="btnIdentify">⚡ Identify Gate</button>
     <button id="btnSave">💾 Save</button>
     <button id="btnExport">Export JSON</button>
     <button id="btnImport">Import JSON</button>
@@ -23,11 +23,13 @@
 </header>
 
 <div class="layout">
+
+  <!-- LEFT PALETTE -->
   <div class="palette">
     <h3>Input / Output</h3>
     <div class="gate-btn" data-type="INPUT">INPUT <small>src</small></div>
     <div class="gate-btn" data-type="OUTPUT">OUTPUT <small>sink</small></div>
-    <h3>Gates</h3>
+    <h3>Logic Gates</h3>
     <div class="gate-btn" data-type="AND">AND <small>∧</small></div>
     <div class="gate-btn" data-type="OR">OR <small>∨</small></div>
     <div class="gate-btn" data-type="NOT">NOT <small>¬</small></div>
@@ -36,28 +38,54 @@
     <div class="gate-btn" data-type="XOR">XOR <small>⊕</small></div>
     <div class="gate-btn" data-type="XNOR">XNOR <small>⊙</small></div>
     <div class="gate-btn" data-type="BUFFER">BUFFER <small>—</small></div>
-    <h3 style="margin-top:20px;">How to use</h3>
-    <p class="hint">Click a gate to drop it on the board. Drag nodes to move. Click an output pin (right) then an input pin (left) to wire them. Toggle INPUT nodes to set values, then hit Simulate. Use "Identify Gate" to see what your combined circuit is equivalent to.</p>
+    <h3>Mux / DeMux</h3>
+    <div class="gate-btn" data-type="MUX">MUX <small>2:1</small></div>
+    <div class="gate-btn" data-type="DEMUX">DEMUX <small>1:2</small></div>
+    <h3 style="margin-top:16px">How to Use</h3>
+    <p class="hint">
+      • Click gate to drop it on board<br>
+      • Drag to reposition<br>
+      • Click output pin (right ●) then input pin (left ●) to wire<br>
+      • Click a wire to delete it<br>
+      • Double-click INPUT to rename it<br>
+      • Select gate → use sidebar to change input count (2–6)<br>
+      • Type expression → Build Circuit to auto-generate
+    </p>
     <h3>Saved Circuits</h3>
     <div id="savedList"><p class="empty-note">Nothing saved yet.</p></div>
   </div>
 
-  <div class="canvas-wrap">
+  <!-- CANVAS -->
+  <div class="canvas-wrap" id="canvasWrap">
     <div id="canvas">
-      <svg id="wires" width="2200" height="1400"></svg>
+      <svg id="wires" width="2400" height="1600"></svg>
     </div>
   </div>
 
+  <!-- RIGHT SIDEPANEL -->
   <div class="sidepanel">
+
+    <h3>Selected Node</h3>
+    <div id="propContent"><p class="hint">Click a node to select it.</p></div>
+
+    <h3>Expression → Circuit</h3>
+    <p class="hint" style="margin:0 0 6px">Build a circuit from a boolean expression. Use +, ·, NOT, AND, OR, XOR, NAND, NOR, parentheses.</p>
+    <input type="text" id="exprInput" placeholder="e.g.  A AND B OR NOT C" style="margin-bottom:6px">
+    <button id="btnBuild" class="primary" style="width:100%">Build Circuit from Expression</button>
+
     <h3>Status</h3>
-    <p class="hint" id="statusText">Build a circuit, then run Simulate.</p>
+    <p class="hint" id="statusText">Drop gates, wire them up, then hit Simulate.</p>
+
     <h3>Equivalent Gate</h3>
     <div class="expr-box" id="identifyBox">—</div>
+
     <h3>Boolean Expression</h3>
     <div class="expr-box" id="exprBox">—</div>
+
     <h3>Truth Table</h3>
     <div id="truthBox"><p class="empty-note">No outputs yet.</p></div>
   </div>
+
 </div>
 
 <script src="script.js"></script>
