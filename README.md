@@ -11,11 +11,20 @@
 
 ### **the logic circuit simulator that actually goes hard** 🔌⚡
 
-[![Made With](https://img.shields.io/badge/Made%20With-HTML%20%7C%20CSS%20%7C%20JS-39ff8f?style=for-the-badge&logo=javascript&logoColor=black)](.)
-[![No Framework](https://img.shields.io/badge/Framework-None%20(Pure%20Vanilla)-ff5d5d?style=for-the-badge)](.)
-[![Zero Dependencies](https://img.shields.io/badge/Dependencies-ZERO-ffb347?style=for-the-badge)](.)
-[![Vibe Check](https://img.shields.io/badge/Vibe%20Check-Passed%20✓-39ff8f?style=for-the-badge)](.)
-[![License](https://img.shields.io/badge/License-MIT-5db8ff?style=for-the-badge)](.)
+<!-- ══════════════════════════════════════════════════════════
+     REPLACE every placeholder below before pushing to GitHub
+     
+     YOUR_USERNAME   → your GitHub username
+     YOUR_REPO_NAME  → your repository name  (e.g. gatework)
+     YOUR_LIVE_URL   → your deployed site URL (e.g. https://YOUR_USERNAME.github.io/YOUR_REPO_NAME)
+══════════════════════════════════════════════════════════ -->
+
+[![Live Demo](https://img.shields.io/badge/🌐%20Live%20Demo-Visit%20Site-39ff8f?style=for-the-badge&labelColor=0b0f0d)](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-YOUR__USERNAME%2FYOUR__REPO__NAME-ffffff?style=for-the-badge&logo=github&logoColor=white&labelColor=161d19)](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME)
+[![Made With](https://img.shields.io/badge/Made%20With-HTML%20%7C%20CSS%20%7C%20JS-ffb347?style=for-the-badge&logoColor=black)](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME)
+[![Zero Dependencies](https://img.shields.io/badge/Dependencies-ZERO-ff5d5d?style=for-the-badge)](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME)
+[![GitHub Pages](https://img.shields.io/badge/Deployed%20on-GitHub%20Pages-5db8ff?style=for-the-badge&logo=githubpages&logoColor=white)](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME)
+[![License MIT](https://img.shields.io/badge/License-MIT-b47aff?style=for-the-badge)](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME/blob/main/LICENSE)
 
 <br>
 
@@ -23,7 +32,14 @@
 
 <br>
 
-[🚀 **Open it**](#-https://gatework.onrender.com/) · [✨ **Features**](#-what-this-thing-does) · [🧮 **Calculator**](#-number-system-calculator) · [🔌 **Gates**](#-supported-gates) · [📐 **Circuits**](#-circuit-building)
+🌐 **[Live Site → YOUR_LIVE_URL](https://gatework.onrender.com/)**
+
+<br>
+
+<!-- Add a demo GIF here after recording one — strongly recommended -->
+<!-- ![Gatework Demo](./assets/demo.gif) -->
+
+[🚀 **Live Demo**](https://gatework.onrender.com/) · [✨ **Features**](#-what-this-thing-does) · [📦 **Deploy It**](#-deploying-to-github-pages) · [🔌 **Gates**](#-supported-gates) · [🧮 **Calculator**](#-number-system-calculator)
 
 </div>
 
@@ -31,17 +47,28 @@
 
 ## 🫦 what even IS this
 
-**Gatework** is a browser-based digital logic circuit simulator built with zero frameworks, zero dependencies, and zero excuses. Drop gates, wire them up, simulate signals, get truth tables, boolean expressions, SOP/POS canonical forms, AND convert between number systems — all in one dark-mode, neon-green, monospace-font tool that looks like it came out of a hacker's second monitor.
+**Gatework** is a browser-based digital logic circuit simulator built with zero frameworks, zero dependencies, and zero excuses. Drop gates, wire them up, simulate signals, get truth tables, boolean expressions, SOP/POS canonical forms — AND convert between number systems — all in one dark-mode, neon-green, monospace-font tool that looks like it came out of a hacker's second monitor.
 
-No install. No npm. No webpack config that breaks at 2am. Just open `index.html` and go.
-
-```
-open index.html   # that's it. you're done. ship it.
-```
+No install. No npm. No webpack config that breaks at 2am. Just open `index.html` and go — or hit the [live link](https://ShyamDadhania14.github.io/gatework) and use it instantly in your browser.
 
 ---
 
-## ✨ what this thing does
+## 📁 Project Structure
+
+```
+gatework/
+│
+├── 📄 index.html       ← full UI, layout, modals, palette
+├── 🎨 style.css        ← dark theme, neon accents, all component styles  
+├── ⚙️  script.js       ← circuit engine + SOP/POS + parser + calculator
+└── 📖 README.md        ← you are here
+```
+
+Three files. No `package.json`. No `/node_modules` eating your SSD. No build step. GitHub Pages serves them as-is.
+
+---
+
+## ✨ What This Thing Does
 
 <table>
 <tr>
@@ -49,13 +76,12 @@ open index.html   # that's it. you're done. ship it.
 
 ### 🔌 Circuit Simulator
 - Drag-and-drop gate placement
-- Click-to-wire output → input pins
-- Click a wire to delete it
-- Live signal propagation (green = HIGH, dark = LOW)
-- Gates show their **live boolean expression** right on them
-- Double-click any INPUT to rename it (A, B, Clk, whatever)
-- Resize multi-input gates (AND/OR etc.) from 2 up to 8 inputs
-- Select a gate → properties panel shows pin count controls
+- Click output pin → input pin to wire
+- Click any wire to delete it
+- Live signal propagation (🟢 = HIGH, ⚫ = LOW)
+- Gates show their **live boolean expression** right on the node
+- Double-click any INPUT to rename it (A, B, Clk, Data — anything)
+- Resize multi-input gates from 2 up to 8 inputs
 
 </td>
 <td width="50%">
@@ -63,21 +89,19 @@ open index.html   # that's it. you're done. ship it.
 ### 🧠 Logic Analysis
 - **Truth Table** — auto-generates for up to 8 inputs
 - **Boolean Expression** — full symbolic expression per output
-- **Identify Gate** — tells you what standard gate your circuit is *equivalent to* (OR + NOT = NOR, etc.)
-- **Circuit SOP/POS** — computes canonical Sum-of-Products and Product-of-Sums from the live circuit
-- Supports up to 8 input nodes simultaneously
+- **Identify Gate** — detects what standard gate your wired circuit equals (OR + NOT = NOR ✓)
+- **Circuit SOP/POS** — canonical Sum-of-Products and Product-of-Sums from the live truth table
 
 </td>
 </tr>
 <tr>
 <td>
 
-### 🏗️ Circuit Builder
-- **Expression → Circuit**: type `A AND B OR NOT C` and watch it build
-- **SOP Builder**: pick variables, select minterms → circuit appears
-- **POS Builder**: pick maxterms → builds the gate tree automatically
+### 🏗️ Auto Circuit Builder
+- **Expression → Circuit**: type `A AND B OR NOT C` → circuit builds itself
+- **SOP Builder**: choose variables + click minterms → gate tree appears
+- **POS Builder**: choose maxterms → builds automatically
 - Supports `+`, `·`, `AND`, `OR`, `NOT`, `XOR`, `NAND`, `NOR`, `XNOR`, `()`
-- Handles nested expressions with full precedence
 
 </td>
 <td>
@@ -86,7 +110,7 @@ open index.html   # that's it. you're done. ship it.
 - **Named saves** — persist circuits across sessions (browser storage)
 - **Export JSON** — download your circuit as a `.json` file
 - **Import JSON** — reload any previously exported circuit
-- Load / Delete saved circuits from the sidebar panel
+- Push your `.json` files to GitHub to version-control circuits
 
 </td>
 </tr>
@@ -98,82 +122,32 @@ open index.html   # that's it. you're done. ship it.
 
 <div align="center">
 
-| Gate | Symbol | Inputs | Logic | Notes |
-|------|--------|--------|-------|-------|
-| **AND** | ∧ | 2–8 | ALL inputs HIGH | Variable input count |
-| **OR** | ∨ | 2–8 | ANY input HIGH | Variable input count |
-| **NOT** | ¬ | 1 | Inverts input | — |
-| **NAND** | ⊼ | 2–8 | NOT AND | Universal gate |
-| **NOR** | ⊽ | 2–8 | NOT OR | Universal gate |
-| **XOR** | ⊕ | 2–8 | Odd number HIGH | Parity checker |
-| **XNOR** | ⊙ | 2–8 | Even number HIGH | Equality checker |
-| **BUFFER** | — | 1 | Pass-through | Signal driver |
-| **MUX 2:1** | — | 3 (D0, D1, S0) | 1 select line | |
-| **MUX 4:1** | — | 6 (D0-3, S0-1) | 2 select lines | |
-| **MUX 8:1** | — | 11 (D0-7, S0-2) | 3 select lines | |
-| **DEMUX 1:2** | — | 2 out: Y0,Y1 | 1 select line | |
-| **DEMUX 1:4** | — | 3 out: Y0-Y3 | 2 select lines | |
-| **DEMUX 1:8** | — | 4 out: Y0-Y7 | 3 select lines | |
+| Gate | Symbol | Inputs | Logic |
+|------|--------|--------|-------|
+| **AND** | ∧ | 2–8 | ALL inputs HIGH |
+| **OR** | ∨ | 2–8 | ANY input HIGH |
+| **NOT** | ¬ | 1 | Inverts input |
+| **NAND** | ⊼ | 2–8 | NOT AND — universal gate |
+| **NOR** | ⊽ | 2–8 | NOT OR — universal gate |
+| **XOR** | ⊕ | 2–8 | Odd count HIGH (parity) |
+| **XNOR** | ⊙ | 2–8 | Even count HIGH (equality) |
+| **BUFFER** | — | 1 | Pass-through / signal driver |
+| **MUX 2:1** | — | D0 D1 S0 | 1 select line |
+| **MUX 4:1** | — | D0–D3 S0–S1 | 2 select lines |
+| **MUX 8:1** | — | D0–D7 S0–S2 | 3 select lines |
+| **DEMUX 1:2** | — | D S0 → Y0 Y1 | 1 select line |
+| **DEMUX 1:4** | — | D S0 S1 → Y0–Y3 | 2 select lines |
+| **DEMUX 1:8** | — | D S0–S2 → Y0–Y7 | 3 select lines |
 
 </div>
 
-> MUX select pins glow **blue** 🔵, DEMUX select pins glow **purple** 🟣 — so you never mix them up.
-
----
-
-## 📐 Circuit Building
-
-### 🔤 From an Expression
-
-Type any boolean expression into the sidebar:
-
-```
-A AND B OR NOT C
-(A + B) · ¬C
-A XOR B XNOR C
-NOT (A NAND B) OR C
-```
-
-Hit **Build Circuit** and the gates auto-layout themselves with wires already connected.
-
----
-
-### 📊 From SOP / POS Terms
-
-```
-Step 1 → Choose number of variables (2, 3, or 4)
-Step 2 → Give them names: A, B, CLK, DATA, whatever
-Step 3 → Click minterms (SOP) or maxterms (POS) in the grid
-Step 4 → Hit "Build Circuit"
-
-Result: Full canonical gate network, wired and ready to simulate
-```
-
-**SOP** produces AND trees feeding an OR gate.
-**POS** produces OR trees feeding an AND gate.
-Both auto-insert NOT gates for complemented literals.
-
----
-
-### 🎯 Gate Identification
-
-Wire up any combination of gates and hit **⚡ Identify** — Gatework compares your circuit's truth table against every known gate pattern:
-
-```
-OR + NOT  →  "Behaves like: NOR"
-AND + NOT →  "Behaves like: NAND"
-XOR + NOT →  "Behaves like: XNOR"
-3-input majority gate recognized ✓
-Hamming parity patterns recognized ✓
-```
+> 🔵 MUX select pins glow **blue** &nbsp;|&nbsp; 🟣 DEMUX select pins glow **purple** — so you never mix them up.
 
 ---
 
 ## 🧮 Number System Calculator
 
-Click **🔢 Calculator** in the header for a draggable floating calculator with three full tabs:
-
----
+Click **🔢 Calculator** in the header — a draggable, minimizable floating window with three tabs:
 
 ### ⇄ Tab 1 — Base Converter
 
@@ -194,152 +168,70 @@ Click **🔢 Calculator** in the header for a draggable floating calculator with
 └──────────────────────────────────────────────────────┘
 ```
 
-- Type in **any** field → all others update instantly
-- **Click individual bits** to toggle them
-- Bit width clamps/wraps the value automatically
-- Signed mode shows two's-complement interpretation
-
----
+Type in **any** field → all others update live. Click individual bits to toggle. Copy button on every field.
 
 ### ± Tab 2 — Arithmetic
 
-Full arithmetic in **any base** (DEC / BIN / OCT / HEX):
+Operates in DEC / BIN / OCT / HEX. Results shown in all four bases at once.
 
 ```
-Operations supported:
-  +   −   ×   ÷   MOD         ← standard math
-  AND OR  XOR NOT              ← bitwise
-  SHL SHR                      ← bit shifts  
-  A^B                          ← exponentiation (BigInt)
+Operations:  +   −   ×   ÷   MOD   AND   OR   XOR   NOT   SHL   SHR   A^B
+Powered by:  JavaScript BigInt — no floating-point errors on large numbers
 ```
-
-Results shown in ALL four bases simultaneously. Binary step-by-step breakdown shown for `+`, `−`, `×`. Powered by JavaScript `BigInt` so it handles arbitrarily large numbers without floating-point errors.
-
----
 
 ### ◈ Tab 3 — Special Codes
-
-Six tools packed into one panel:
 
 | Tool | What it does |
 |------|-------------|
 | **Gray Code ↔ Binary** | Convert either direction, any length |
-| **BCD Encoder/Decoder** | Decimal → 4-bit nibble groups and back |
-| **ASCII Lookup** | Char or code → DEC/HEX/OCT/BIN + neighbour grid |
+| **BCD Encoder / Decoder** | Decimal ↔ 4-bit nibble groups |
+| **ASCII Lookup** | Char or code → DEC / HEX / OCT / BIN + neighbour grid |
 | **Excess-N / Biased** | Encode signed integers with any bias N |
-| **Hamming Weight & Distance** | Weight of A, weight of B, distance, XOR pattern |
-| **IEEE 754 Float** | 32-bit breakdown with colour-coded sign/exp/mantissa bits + special value detection |
+| **Hamming Weight & Distance** | Weight of A, weight of B, XOR pattern |
+| **IEEE 754 Float** | 32-bit colour-coded breakdown — sign, exponent, mantissa + NaN / ±∞ detection |
 
 ---
 
-## 🗂️ Project Structure
-
-```
-gatework/
-├── 📄 index.html       ← full UI, layout, modals, palette
-├── 🎨 style.css        ← dark theme, neon accents, all component styles
-└── ⚙️  script.js       ← circuit engine + SOP/POS + parser + calculator
-```
-
-Three files. No build step. No bundler. No `node_modules` folder eating your SSD.
-
----
-
-## 🚀 Getting Started
-
-```bash
-# option 1 — just open it
-open index.html
-
-# option 2 — serve locally if you want hot reload
-npx serve .
-# or
-python3 -m http.server 8080
-```
-
-Works in any modern browser. Chrome, Firefox, Edge, Safari — all good. No internet required after download.
-
----
-
-## 🎨 Design Language
-
-Built for dark mode. Looks wrong in light mode. That's a feature.
-
----
-
-## 🧩 How the Circuit Engine Works
-
-```
-User places nodes  →  nodes{}  (id, type, x, y, value, numIns)
-User draws wires   →  wires[]  (from: {node, pin}, to: {node, pin})
-
-Simulate():
-  for each node (topological order via recursion):
-    computeValue(nodeId):
-      if INPUT  → return toggle state
-      if gate   → gather input values from connected wires
-                → evaluate gate logic
-                → return result
-  update all LEDs, wire colours, gate expression labels
-```
-
-Signal propagation is recursive with cycle detection (visited set). MUX and DEMUX handle multi-output simulation via `outPin` parameter.
-
----
-
-## 🤯 Things That Go Hard
-
-- **Live expressions on every gate** — AND gate connected to A, B, C shows `A·B·C` right on the node body as you wire it
-- **BigInt arithmetic** — the calculator uses JavaScript `BigInt` so `2^64` doesn't turn into `1.8446744e+19`
-- **One-click circuit from SOP** — select minterms 1, 3, 5, 7 → full circuit with AND/OR/NOT tree appears instantly
-- **Identify any combination** — the engine brute-forces the truth table and matches against 30+ known patterns including majority gates and inhibition functions
-- **IEEE 754 color coding** — each bit group (sign/exponent/mantissa) has its own color with real exponent, bias breakdown, and NaN/Infinity detection
-
----
-
-## 💡 Example Circuits to Try
+## 📐 Circuit Building Examples
 
 ```
 Classic NOR from primitives:
   INPUT A ──┐
-            OR ──── NOT ──── OUTPUT     → identifies as NOR ✓
+            OR ──── NOT ──── OUTPUT    →  Identify: "NOR" ✓
   INPUT B ──┘
 
 Half Adder:
-  INPUT A ──┬──── XOR ────────────── SUM
-            │
-  INPUT B ──┼──── AND ────────────── CARRY
-            │
-  (wire A and B to both gates)
+  INPUT A ──┬──── XOR ──── SUM
+  INPUT B ──┼──── AND ──── CARRY
 
-3-variable Majority Gate via SOP:
-  Minterms: 3, 5, 6, 7  (where ≥2 inputs are HIGH)
-  → SOP Builder → Build Circuit → simulate → Identify → "Majority (≥2 of 3)" ✓
+3-variable Majority Gate (via SOP Builder):
+  Select minterms 3, 5, 6, 7  →  Build Circuit  →  Identify: "Majority (≥2 of 3)" ✓
 ```
 
 ---
 
-## 🛠️ Keyboard & UI Shortcuts
+## ⌨️ Keyboard & UI Quick Reference
 
 | Action | How |
 |--------|-----|
+| Place a gate | Click it in the left palette |
+| Move a gate | Drag it on the canvas |
 | Start a wire | Click output pin (right ●) |
 | Complete wire | Click input pin (left ●) |
 | Cancel wire | Click empty canvas |
 | Delete wire | Click the wire itself |
-| Delete gate | Hover gate → click × button |
+| Delete gate | Hover gate → click × |
 | Rename input | Double-click the INPUT node |
-| Resize gate inputs | Select gate → −/+ buttons in sidebar |
+| Change gate input count | Select gate → −/+ in sidebar |
 | Build from expression | Type in sidebar → Enter |
-| Toggle input value | Click the toggle switch on INPUT node |
+| Toggle input HIGH/LOW | Click the toggle switch |
+| Open calculator | 🔢 button in header |
 | Move calculator | Drag its header bar |
 | Minimize calculator | Click — button |
 
 ---
 
-## 📦 Export Format
-
-Circuits export as clean JSON:
+## 📦 Circuit Export Format
 
 ```json
 {
@@ -355,21 +247,54 @@ Circuits export as clean JSON:
 }
 ```
 
-Portable, readable, versionable. Commit it to git. Share it in a DM. Whatever.
+Human-readable. Version-control it. Share it in a DM. Commit your favourite circuits to the repo.
 
 ---
 
-## 🧑‍💻 Built With
+## 🎨 Design System
 
 ```
-HTML5           canvas layout, semantic structure
-CSS3            custom properties, grid, flex, transitions
-JavaScript      ES2020+, BigInt, structuredClone, modules
-Web APIs        localStorage (circuit saves), Clipboard API, File API
-Fonts           Space Mono (Google Fonts fallback: Courier New)
+Background    #0b0f0d   ← almost-black, hint of green
+Signal HIGH   #39ff8f   ← neon green
+Expressions   #ffb347   ← amber
+Error / Del   #ff5d5d   ← soft red  
+MUX pins      #5db8ff   ← electric blue
+DEMUX pins    #b47aff   ← purple
+Font          Space Mono (fallback: Courier New)
 ```
 
-No React. No Vue. No Tailwind. No `package.json`. Just vibes and vanilla.
+Built for dark mode. Looks wrong in light mode. That's a feature, not a bug.
+
+---
+
+## 🛠️ Built With
+
+```
+HTML5        semantic layout, modal, palette
+CSS3         custom properties, grid, flex, transitions
+JavaScript   ES2020+, BigInt, File API, Clipboard API
+Storage      window.localStorage  (circuit saves)
+Hosting      onrender.com  (free, zero config)
+```
+
+---
+
+## 🔭 What Could Come Next
+
+- [ ] D flip-flop, SR latch, JK, T — sequential logic
+- [ ] Clock signal with configurable frequency
+- [ ] Karnaugh map (K-map) minimization
+- [ ] Undo / Redo (Ctrl+Z)
+- [ ] Export circuit as PNG / SVG
+- [ ] Multi-bit buses (4-bit adder, ALU)
+- [ ] More calculator tools: CRC, checksum, float arithmetic
+
+---
+
+## 📄 License
+
+Distributed under the **MIT License** — see [`LICENSE`](https://github.com/ShyamDadhania14/gatework/blob/main/LICENSE) for details.
+Free to use, modify, fork, and ship. Just don't remove the license header.
 
 ---
 
@@ -384,10 +309,10 @@ No React. No Vue. No Tailwind. No `package.json`. Just vibes and vanilla.
  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 ```
 
-**if this slapped, drop a ⭐ — it costs nothing and means everything**
+**if this helped, drop a ⭐ — costs nothing, means everything**
 
-[![Star on GitHub](https://img.shields.io/badge/⭐%20Star%20this%20Repo-ffb347?style=for-the-badge)](.)
-[![Share It](https://img.shields.io/badge/📤%20Share%20with%20your%20CS%20friends-39ff8f?style=for-the-badge&labelColor=0b0f0d)](.)
+[![Star this Repo](https://img.shields.io/badge/⭐%20Star%20this%20Repo-ffb347?style=for-the-badge&labelColor=0b0f0d)](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME)
+[![Live Demo](https://img.shields.io/badge/🌐%20Try%20the%20Live%20Demo-39ff8f?style=for-the-badge&labelColor=0b0f0d)](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME)
 
 *built different. wired different.* ⚡
 
