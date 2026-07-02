@@ -19,12 +19,12 @@
      YOUR_LIVE_URL   → your deployed site URL (e.g. https://YOUR_USERNAME.github.io/YOUR_REPO_NAME)
 ══════════════════════════════════════════════════════════ -->
 
-[![Live Demo](https://img.shields.io/badge/🌐%20Live%20Demo-Visit%20Site-39ff8f?style=for-the-badge&labelColor=0b0f0d)](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME)
-[![GitHub Repo](https://img.shields.io/badge/GitHub-YOUR__USERNAME%2FYOUR__REPO__NAME-ffffff?style=for-the-badge&logo=github&logoColor=white&labelColor=161d19)](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME)
-[![Made With](https://img.shields.io/badge/Made%20With-HTML%20%7C%20CSS%20%7C%20JS-ffb347?style=for-the-badge&logoColor=black)](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME)
-[![Zero Dependencies](https://img.shields.io/badge/Dependencies-ZERO-ff5d5d?style=for-the-badge)](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME)
-[![GitHub Pages](https://img.shields.io/badge/Deployed%20on-GitHub%20Pages-5db8ff?style=for-the-badge&logo=githubpages&logoColor=white)](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME)
-[![License MIT](https://img.shields.io/badge/License-MIT-b47aff?style=for-the-badge)](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME/blob/main/LICENSE)
+[![Live Demo](https://img.shields.io/badge/🌐%20Live%20Demo-Visit%20Site-39ff8f?style=for-the-badge&labelColor=0b0f0d)](https://github.com/ShyamDadhania14/gatework/blob/main/assets/Demo.mp4)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-YOUR__USERNAME%2FYOUR__REPO__NAME-ffffff?style=for-the-badge&logo=github&logoColor=white&labelColor=161d19)](https://github.com/ShyamDadhania14/gatework)
+[![Made With](https://img.shields.io/badge/Made%20With-HTML%20%7C%20CSS%20%7C%20JS-ffb347?style=for-the-badge&logoColor=black)](https://github.com/ShyamDadhania14/gatework)
+[![Zero Dependencies](https://img.shields.io/badge/Dependencies-ZERO-ff5d5d?style=for-the-badge)](https://github.com/ShyamDadhania14/gatework)
+[![GitHub Pages](https://img.shields.io/badge/Deployed%20on-GitHub%20Pages-5db8ff?style=for-the-badge&logo=githubpages&logoColor=white)](https://ShyamDadhania14.github.io/gatework)
+[![License MIT](https://img.shields.io/badge/License-MIT-b47aff?style=for-the-badge)](https://github.com/ShyamDadhania14/gatework/blob/main/LICENSE)
 
 <br>
 
@@ -39,7 +39,7 @@
 <!-- Add a demo GIF here after recording one — strongly recommended -->
 <!-- ![Gatework Demo](./assets/demo.gif) -->
 
-[🚀 **Live Demo**](https://gatework.onrender.com/) · [✨ **Features**](#-what-this-thing-does) · [📦 **Deploy It**](#-deploying-to-github-pages) · [🔌 **Gates**](#-supported-gates) · [🧮 **Calculator**](#-number-system-calculator)
+[🚀 **Live Demo**](https://github.com/ShyamDadhania14/gatework/blob/main/assets/Demo.mp4) · [✨ **Features**](#-what-this-thing-does) · [📦 **Deploy It**](#-deploying-to-github-pages) · [🔌 **Gates**](#-supported-gates) · [🧮 **Calculator**](#-number-system-calculator)
 
 </div>
 
@@ -58,6 +58,8 @@ No install. No npm. No webpack config that breaks at 2am. Just open `index.html`
 ```
 gatework/
 │
+├──assets/
+│  ├── Demo.mp4
 ├── 📄 index.html       ← full UI, layout, modals, palette
 ├── 🎨 style.css        ← dark theme, neon accents, all component styles  
 ├── ⚙️  script.js       ← circuit engine + SOP/POS + parser + calculator
@@ -311,8 +313,8 @@ Free to use, modify, fork, and ship. Just don't remove the license header.
 
 **if this helped, drop a ⭐ — costs nothing, means everything**
 
-[![Star this Repo](https://img.shields.io/badge/⭐%20Star%20this%20Repo-ffb347?style=for-the-badge&labelColor=0b0f0d)](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME)
-[![Live Demo](https://img.shields.io/badge/🌐%20Try%20the%20Live%20Demo-39ff8f?style=for-the-badge&labelColor=0b0f0d)](https://YOUR_USERNAME.github.io/YOUR_REPO_NAME)
+[![Star this Repo](https://img.shields.io/badge/⭐%20Star%20this%20Repo-ffb347?style=for-the-badge&labelColor=0b0f0d)](https://github.com/ShyamDadhania14/gatework)
+[![Live Demo](https://img.shields.io/badge/🌐%20Try%20the%20Live%20Demo-39ff8f?style=for-the-badge&labelColor=0b0f0d)](https://github.com/ShyamDadhania14/gatework/blob/main/assets/Demo.mp4)
 
 *built different. wired different.* ⚡
 
