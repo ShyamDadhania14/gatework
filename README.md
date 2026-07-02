@@ -20,7 +20,7 @@
 ══════════════════════════════════════════════════════════ -->
 
 [![Demo Video](https://img.shields.io/badge/🎥%20Demo-Watch%20Video-ff5d5d?style=for-the-badge&labelColor=0b0f0d)](https://github.com/ShyamDadhania14/gatework/blob/main/assets/Demo.mp4)
-[![GitHub Repo](https://img.shields.io/badge/GitHub-YOUR__USERNAME%2FYOUR__REPO__NAME-ffffff?style=for-the-badge&logo=github&logoColor=white&labelColor=161d19)](https://github.com/ShyamDadhania14/gatework)
+[![GitHub Repo](https://img.shields.io/badge/ShyamDadhania14%2Fgatework-ffffff?style=for-the-badge&logo=github&logoColor=white&labelColor=161d19)](https://github.com/ShyamDadhania14/gatework)
 [![Made With](https://img.shields.io/badge/Made%20With-HTML%20%7C%20CSS%20%7C%20JS-ffb347?style=for-the-badge&logoColor=black)](https://github.com/ShyamDadhania14/gatework)
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-ZERO-ff5d5d?style=for-the-badge)](https://github.com/ShyamDadhania14/gatework)
 [![GitHub Pages](https://img.shields.io/badge/Deployed%20on-GitHub%20Pages-5db8ff?style=for-the-badge&logo=githubpages&logoColor=white)](https://ShyamDadhania14.github.io/gatework)
