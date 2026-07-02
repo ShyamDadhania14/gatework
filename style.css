@@ -112,3 +112,162 @@ input[type=text]:focus{outline:none;border-color:var(--trace);}
 .saved-item button{padding:2px 6px;font-size:9px;}
 ::-webkit-scrollbar{width:7px;height:7px;}
 ::-webkit-scrollbar-thumb{background:var(--trace-dim);border-radius:4px;}
+
+/* ══════════════════════════════════════════════════════════════
+   CALCULATOR MODAL
+══════════════════════════════════════════════════════════════ */
+.calc-modal {
+  position: fixed; inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+}
+.calc-modal.hidden .calc-box { display: none; }
+.calc-box {
+  pointer-events: all;
+  position: absolute;
+  top: 60px; left: 50%;
+  transform: translateX(-50%);
+  width: 720px; max-width: 98vw;
+  background: #0f1711;
+  border: 1.5px solid var(--trace-dim);
+  border-radius: 8px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.8);
+  display: flex; flex-direction: column;
+  max-height: 90vh;
+  overflow: hidden;
+}
+.calc-hdr {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 14px;
+  background: linear-gradient(90deg, #0d1a10, #0a1510);
+  border-bottom: 1px solid var(--trace-dim);
+  cursor: move; user-select: none;
+  font-size: 13px; font-weight: 700; letter-spacing: 1px;
+  color: var(--trace);
+  flex-shrink: 0;
+}
+.calc-close, .calc-min {
+  background: none; border: none; color: var(--text-dim);
+  font-size: 14px; cursor: pointer; padding: 2px 7px; border-radius: 3px;
+  font-family: inherit; letter-spacing: 0; text-transform: none;
+}
+.calc-close:hover { background: var(--red); color: #fff; }
+.calc-min:hover { background: var(--trace-dim); color: #fff; }
+.calc-tabs {
+  display: flex; border-bottom: 1px solid var(--trace-dim);
+  background: #0c1410; flex-shrink: 0;
+}
+.ctab {
+  flex: 1; padding: 9px 4px; font-size: 10px; letter-spacing: .8px;
+  text-transform: uppercase; background: none;
+  border: none; border-bottom: 2px solid transparent;
+  color: var(--text-dim); cursor: pointer; transition: .15s;
+}
+.ctab:hover { color: var(--text); }
+.ctab.active { color: var(--trace); border-bottom-color: var(--trace); }
+.ctab-body {
+  padding: 14px; overflow-y: auto; flex: 1;
+}
+.ctab-body.hidden { display: none; }
+
+/* ── CONVERTER ── */
+.bw-bar {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap; margin-bottom: 12px;
+}
+.bw-btns { display: flex; gap: 4px; }
+.bw-btns button {
+  padding: 4px 10px; font-size: 10px; min-width: 36px;
+  background: #0d1710; border-color: #2a3a2a;
+}
+.bw-btns button.bw-active {
+  background: var(--trace); color: #05120a; border-color: var(--trace); font-weight: 700;
+}
+.conv-fields { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.conv-row {
+  display: flex; align-items: center; gap: 8px;
+}
+.base-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  padding: 3px 7px; border-radius: 3px; min-width: 38px; text-align: center;
+  flex-shrink: 0;
+}
+.c-dec { background: #1a2a1e; color: var(--trace);   border: 1px solid var(--trace-dim); }
+.c-bin { background: #1a1a2e; color: #7ab4ff;        border: 1px solid #2a3a5e; }
+.c-oct { background: #2a1e10; color: #ffb870;        border: 1px solid #5e3a10; }
+.c-hex { background: #2a102a; color: #d47aff;        border: 1px solid #5e1a5e; }
+.conv-inp {
+  font-family: 'Space Mono', monospace;
+  background: #0a130c; border: 1px solid #1e2e22; color: var(--text);
+  padding: 7px 9px; border-radius: 4px; font-size: 13px; flex: 1; min-width: 0;
+}
+.conv-inp:focus { outline: none; border-color: var(--trace); background: #0d170f; }
+.copy-btn {
+  padding: 4px 7px; font-size: 12px; background: none;
+  border: 1px solid #1e2e22; color: var(--text-dim); border-radius: 3px;
+  cursor: pointer; flex-shrink: 0;
+  text-transform: none; letter-spacing: 0;
+}
+.copy-btn:hover { border-color: var(--trace); color: var(--trace); }
+/* Bit grid */
+.bit-grid { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 10px; }
+.bit-cell {
+  width: 28px; height: 28px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  border: 1.5px solid #1a2a1e; transition: .1s;
+  position: relative; flex-shrink: 0;
+}
+.bit-cell.b1 { background: #0d2a18; color: var(--trace); border-color: var(--trace); box-shadow: 0 0 5px rgba(57,255,143,.25); }
+.bit-cell.b0 { background: #0a1210; color: #3a5a45; border-color: #1e2e22; }
+.bit-cell:hover { border-color: var(--amber); }
+.bit-idx { position: absolute; bottom: -13px; left: 50%; transform: translateX(-50%); font-size: 7px; color: #3a5a45; pointer-events: none; }
+.bit-group-sep { width: 6px; flex-shrink: 0; }
+/* Extra cards */
+.extras-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
+.extra-card { background: #0a1410; border: 1px solid #1e2e22; border-radius: 5px; padding: 7px 10px; min-width: 100px; flex: 1; }
+.extra-card .clabel { display: block; font-size: 8px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+.extra-card .cval { font-size: 11px; color: var(--amber); word-break: break-all; }
+.clabel { font-size: 9px; color: var(--text-dim); letter-spacing: .8px; text-transform: uppercase; }
+.cval { color: var(--amber); }
+.mono { font-family: 'Space Mono', monospace; }
+
+/* ── ARITHMETIC ── */
+.arith-top { display: flex; flex-direction: column; gap: 7px; }
+.arith-base-row { display: flex; align-items: center; gap: 10px; }
+.arith-inp-row { display: flex; align-items: center; gap: 8px; }
+.aop-lbl { font-size: 14px; font-weight: 700; color: var(--trace); min-width: 16px; text-align: center; }
+.op-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+.op-btn {
+  padding: 7px 4px; font-size: 11px; letter-spacing: 0; text-transform: none;
+  background: #0d1710; border-color: #2a3a2a;
+}
+.op-btn.active { background: var(--trace); color: #05120a; border-color: var(--trace); font-weight: 700; }
+.op-btn:hover { background: var(--trace-dim); color: #fff; }
+#arithResult { margin-top: 12px; }
+.arith-res-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 8px; }
+.arith-res-table th { background: #0d1a10; color: var(--trace); padding: 5px 8px; border: 1px solid #1e2e22; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
+.arith-res-table td { border: 1px solid #1e2e22; padding: 5px 8px; color: var(--text); }
+.arith-res-table td.val { color: var(--amber); font-family: 'Space Mono', monospace; }
+.steps-box { background: #080f0a; border: 1px solid #1e2e22; border-radius: 4px; padding: 10px; font-size: 11px; color: var(--text-dim); font-family: 'Space Mono', monospace; white-space: pre; overflow-x: auto; line-height: 1.7; }
+
+/* ── SPECIAL CODES ── */
+.sp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sp-card { background: #0a1410; border: 1px solid #1e2e22; border-radius: 6px; padding: 12px; }
+.sp-card-wide { grid-column: span 2; }
+.sp-title { font-size: 10px; color: var(--trace); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 9px; font-weight: 700; }
+.sp-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+.sp-inp { flex: 1; min-width: 60px; }
+.sp-out { margin-top: 5px; font-size: 11px; color: var(--amber); font-family: 'Space Mono', monospace; word-break: break-all; line-height: 1.6; min-height: 18px; }
+.ieee-bits { display: flex; gap: 2px; flex-wrap: wrap; margin-top: 8px; }
+.ieee-bit { width: 20px; height: 20px; border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; cursor: default; }
+.ieee-sign { background: #3a1010; color: #ff7070; border: 1px solid #5a2020; }
+.ieee-exp  { background: #1a2a10; color: #7aff70; border: 1px solid #2a4a20; }
+.ieee-man  { background: #10182a; color: #70aaff; border: 1px solid #203060; }
+.ieee-legend { display: flex; gap: 12px; margin-top: 6px; font-size: 9px; }
+.ieee-lbl { display: flex; align-items: center; gap: 4px; }
+.ieee-lbl span { width: 10px; height: 10px; border-radius: 2px; }
+.ascii-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 4px; margin-top: 6px; }
+.ascii-cell { background: #0d1a10; border: 1px solid #1e2e22; border-radius: 3px; padding: 4px 6px; font-size: 10px; }
+.ascii-cell .ak { color: var(--trace); font-weight: 700; }
+.ascii-cell .av { color: var(--text-dim); }

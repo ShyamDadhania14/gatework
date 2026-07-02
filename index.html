@@ -14,6 +14,7 @@
     <button id="btnExpr">Expression</button>
     <button id="btnSOPCircuit">Circuit SOP/POS</button>
     <button id="btnIdentify">⚡ Identify</button>
+    <button id="btnCalc" style="background:#1a2a1a;border-color:#3a8f5f;color:#5dffac;">🔢 Calculator</button>
     <button id="btnSave">💾 Save</button>
     <button id="btnExport">Export JSON</button>
     <button id="btnImport">Import JSON</button>
@@ -22,7 +23,6 @@
   </div>
 </header>
 <div class="layout">
-
   <!-- PALETTE -->
   <div class="palette">
     <h3>Input / Output</h3>
@@ -52,77 +52,228 @@
       • Right ● → Left ● to wire<br>
       • Click wire to delete it<br>
       • Dbl-click INPUT to rename<br>
-      • Select gate → +/− inputs (AND/OR etc.)<br>
+      • Select gate → +/− inputs<br>
       • Type expression then Build<br>
-      • Enter SOP/POS minterms → Build Circuit
+      • Enter SOP/POS → Build Circuit<br>
+      • 🔢 Calculator for conversions
     </p>
     <h3>Saved</h3>
     <div id="savedList"><p class="empty-note">Nothing saved yet.</p></div>
   </div>
-
   <!-- CANVAS -->
   <div class="canvas-wrap" id="canvasWrap">
     <div id="canvas">
       <svg id="wires" width="2800" height="1800"></svg>
     </div>
   </div>
-
   <!-- SIDEPANEL -->
   <div class="sidepanel">
-
     <h3>Selected Node</h3>
     <div id="propContent"><p class="hint">Click a node to select it.</p></div>
-
     <h3>Expression → Circuit</h3>
     <input type="text" id="exprInput" placeholder="e.g. A AND B OR NOT C" style="margin-bottom:5px">
     <button id="btnBuild" class="primary" style="width:100%;margin-bottom:2px">Build Circuit from Expression</button>
-
     <h3>SOP / POS Builder</h3>
     <div id="sopBuilder">
       <div class="row2">
-        <div>
-          <label class="prop-label">Num Vars</label>
-          <select id="sopVarCount" class="sel-sm">
-            <option value="2">2</option>
-            <option value="3" selected>3</option>
-            <option value="4">4</option>
-          </select>
-        </div>
-        <div>
-          <label class="prop-label">Mode</label>
-          <select id="sopMode" class="sel-sm">
-            <option value="SOP">SOP (minterms)</option>
-            <option value="POS">POS (maxterms)</option>
-          </select>
-        </div>
+        <div><label class="prop-label">Num Vars</label><select id="sopVarCount" class="sel-sm"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option></select></div>
+        <div><label class="prop-label">Mode</label><select id="sopMode" class="sel-sm"><option value="SOP">SOP (minterms)</option><option value="POS">POS (maxterms)</option></select></div>
       </div>
       <div id="sopVarNames" class="var-names-row"></div>
       <label class="prop-label" style="margin-top:6px" id="sopGridLabel">Select minterms (output = 1):</label>
       <div id="mintermGrid" class="minterm-grid"></div>
       <div id="sopExprDisplay" class="expr-box" style="margin-top:6px;font-size:11px">—</div>
       <div class="row2" style="margin-top:6px">
-        <button id="btnSOPExpr" style="flex:1">Show Expression</button>
+        <button id="btnSOPExpr" style="flex:1">Show Expr</button>
         <button id="btnBuildSOP" class="primary" style="flex:1">Build Circuit</button>
       </div>
     </div>
-
     <h3>Circuit SOP / POS</h3>
     <div id="circuitSopBox" class="expr-box" style="font-size:11px">Run "Circuit SOP/POS" after simulating.</div>
-
     <h3>Status</h3>
     <p class="hint" id="statusText">Drop gates, wire them, then Simulate.</p>
-
     <h3>Equivalent Gate</h3>
     <div class="expr-box" id="identifyBox">—</div>
-
     <h3>Boolean Expression</h3>
     <div class="expr-box" id="exprBox">—</div>
-
     <h3>Truth Table</h3>
     <div id="truthBox"><p class="empty-note">No outputs yet.</p></div>
+  </div>
+</div>
 
-  </div><!-- /sidepanel -->
-</div><!-- /layout -->
+<!-- ════════════════════════════════════════════
+     NUMBER SYSTEM CALCULATOR MODAL
+════════════════════════════════════════════ -->
+<div id="calcModal" class="calc-modal hidden">
+  <div class="calc-box" id="calcBox">
+    <!-- Header (draggable) -->
+    <div class="calc-hdr" id="calcDragHdr">
+      <span>🔢 Number System Calculator</span>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button class="calc-min" id="calcMin">—</button>
+        <button class="calc-close" id="calcClose">✕</button>
+      </div>
+    </div>
+    <!-- Tabs -->
+    <div class="calc-tabs" id="calcTabsBody">
+      <button class="ctab active" data-tab="conv">⇄ Converter</button>
+      <button class="ctab" data-tab="arith">± Arithmetic</button>
+      <button class="ctab" data-tab="special">◈ Special Codes</button>
+    </div>
+
+    <!-- ── TAB 1: CONVERTER ── -->
+    <div id="ctab-conv" class="ctab-body">
+      <div class="bw-bar">
+        <span class="clabel">Bit Width:</span>
+        <div class="bw-btns" id="bwBtns">
+          <button data-bw="4">4</button>
+          <button data-bw="8" class="bw-active">8</button>
+          <button data-bw="16">16</button>
+          <button data-bw="32">32</button>
+          <button data-bw="64">64</button>
+        </div>
+        <label class="clabel" style="margin-left:14px;display:flex;align-items:center;gap:5px;cursor:pointer">
+          <input type="checkbox" id="calcSigned"> Signed
+        </label>
+        <button id="btnConvClear" style="margin-left:auto;padding:3px 8px;font-size:9px">Clear</button>
+      </div>
+      <div class="conv-fields">
+        <div class="conv-row">
+          <span class="base-tag c-dec">DEC</span>
+          <input class="conv-inp" id="cDec" placeholder="Decimal integer">
+          <button class="copy-btn" data-copy="cDec" title="Copy">⎘</button>
+        </div>
+        <div class="conv-row">
+          <span class="base-tag c-bin">BIN</span>
+          <input class="conv-inp" id="cBin" placeholder="Binary  0 / 1">
+          <button class="copy-btn" data-copy="cBin" title="Copy">⎘</button>
+        </div>
+        <div class="conv-row">
+          <span class="base-tag c-oct">OCT</span>
+          <input class="conv-inp" id="cOct" placeholder="Octal  0 – 7">
+          <button class="copy-btn" data-copy="cOct" title="Copy">⎘</button>
+        </div>
+        <div class="conv-row">
+          <span class="base-tag c-hex">HEX</span>
+          <input class="conv-inp" id="cHex" placeholder="Hex  0 – F">
+          <button class="copy-btn" data-copy="cHex" title="Copy">⎘</button>
+        </div>
+      </div>
+      <!-- Bit visual grid -->
+      <div id="bitGridWrap">
+        <div class="clabel" style="margin-bottom:4px">Binary Bit View <small style="color:var(--text-dim)">(click bit to toggle)</small></div>
+        <div id="bitGrid" class="bit-grid"></div>
+      </div>
+      <!-- Extra info row -->
+      <div class="extras-row">
+        <div class="extra-card"><span class="clabel">1's Comp</span><span class="cval mono" id="comp1">—</span></div>
+        <div class="extra-card"><span class="clabel">2's Comp</span><span class="cval mono" id="comp2">—</span></div>
+        <div class="extra-card"><span class="clabel">Gray Code</span><span class="cval mono" id="grayDisp">—</span></div>
+        <div class="extra-card"><span class="clabel">MSB</span><span class="cval mono" id="msbDisp">—</span></div>
+        <div class="extra-card"><span class="clabel">LSB</span><span class="cval mono" id="lsbDisp">—</span></div>
+        <div class="extra-card"><span class="clabel">Set Bits</span><span class="cval mono" id="setBits">—</span></div>
+        <div class="extra-card"><span class="clabel">Signed Val</span><span class="cval mono" id="signedVal">—</span></div>
+        <div class="extra-card"><span class="clabel">Magnitude</span><span class="cval mono" id="magnVal">—</span></div>
+      </div>
+    </div>
+
+    <!-- ── TAB 2: ARITHMETIC ── -->
+    <div id="ctab-arith" class="ctab-body hidden">
+      <div class="arith-top">
+        <div class="arith-base-row">
+          <span class="clabel">Input base:</span>
+          <div class="bw-btns" id="arithBaseBtns">
+            <button data-base="10" class="bw-active">DEC</button>
+            <button data-base="2">BIN</button>
+            <button data-base="8">OCT</button>
+            <button data-base="16">HEX</button>
+          </div>
+        </div>
+        <div class="arith-inp-row">
+          <span class="aop-lbl">A</span>
+          <input class="conv-inp" id="aA" placeholder="Operand A">
+        </div>
+        <div class="op-grid" id="opGrid">
+          <button class="op-btn active" data-op="+">+</button>
+          <button class="op-btn" data-op="-">−</button>
+          <button class="op-btn" data-op="*">×</button>
+          <button class="op-btn" data-op="/">÷</button>
+          <button class="op-btn" data-op="%">MOD</button>
+          <button class="op-btn" data-op="AND">AND</button>
+          <button class="op-btn" data-op="OR">OR</button>
+          <button class="op-btn" data-op="XOR">XOR</button>
+          <button class="op-btn" data-op="NOT">NOT A</button>
+          <button class="op-btn" data-op="SHL">SHL &lt;&lt;</button>
+          <button class="op-btn" data-op="SHR">SHR &gt;&gt;</button>
+          <button class="op-btn" data-op="POW">A ^ B</button>
+        </div>
+        <div class="arith-inp-row">
+          <span class="aop-lbl">B</span>
+          <input class="conv-inp" id="aB" placeholder="Operand B">
+        </div>
+        <button id="btnArith" class="primary" style="width:100%;margin-top:10px">= Calculate</button>
+      </div>
+      <div id="arithResult"></div>
+    </div>
+
+    <!-- ── TAB 3: SPECIAL CODES ── -->
+    <div id="ctab-special" class="ctab-body hidden">
+      <div class="sp-grid">
+
+        <!-- Gray Code -->
+        <div class="sp-card">
+          <div class="sp-title">⬛ Gray Code ↔ Binary</div>
+          <div class="sp-row"><span class="clabel">Binary →</span><input class="conv-inp sp-inp" id="gBin" placeholder="1010"><button id="btnBinGray">→ Gray</button></div>
+          <div class="sp-row"><span class="clabel">Gray →</span><input class="conv-inp sp-inp" id="gGray" placeholder="1111"><button id="btnGrayBin">→ Binary</button></div>
+          <div class="cval mono sp-out" id="grayOut">—</div>
+        </div>
+
+        <!-- BCD -->
+        <div class="sp-card">
+          <div class="sp-title">🔢 BCD (Binary Coded Decimal)</div>
+          <div class="sp-row"><span class="clabel">Decimal →</span><input class="conv-inp sp-inp" id="bcdIn" placeholder="295"><button id="btnBcd">Encode</button></div>
+          <div class="sp-row"><span class="clabel">BCD groups →</span><input class="conv-inp sp-inp" id="bcdBin" placeholder="0010 1001 0101"><button id="btnBcdDec">→ Dec</button></div>
+          <div class="cval mono sp-out" id="bcdOut">—</div>
+        </div>
+
+        <!-- ASCII -->
+        <div class="sp-card">
+          <div class="sp-title">🔤 ASCII Lookup</div>
+          <div class="sp-row">
+            <span class="clabel">Char</span><input class="conv-inp sp-inp" id="asciiChar" maxlength="1" placeholder="A" style="width:46px">
+            <span class="clabel">or Dec</span><input class="conv-inp sp-inp" id="asciiDec" placeholder="65" style="width:56px">
+            <button id="btnAscii">Lookup</button>
+          </div>
+          <div id="asciiResult" class="sp-out"></div>
+        </div>
+
+        <!-- Excess / Bias -->
+        <div class="sp-card">
+          <div class="sp-title">⚖ Excess-N / Biased Notation</div>
+          <div class="sp-row"><span class="clabel">Decimal</span><input class="conv-inp sp-inp" id="excessDec" placeholder="-5"><span class="clabel">Bias N</span><input class="conv-inp sp-inp" id="excessN" placeholder="128" style="width:56px"><button id="btnExcess">Encode</button></div>
+          <div class="cval mono sp-out" id="excessOut">—</div>
+        </div>
+
+        <!-- Hamming weight / distance -->
+        <div class="sp-card">
+          <div class="sp-title">🔬 Hamming Weight & Distance</div>
+          <div class="sp-row"><span class="clabel">Bin A</span><input class="conv-inp sp-inp" id="hamA" placeholder="1011"><span class="clabel">Bin B</span><input class="conv-inp sp-inp" id="hamB" placeholder="1100"><button id="btnHam">Compute</button></div>
+          <div class="cval mono sp-out" id="hamOut">—</div>
+        </div>
+
+        <!-- IEEE 754 -->
+        <div class="sp-card sp-card-wide">
+          <div class="sp-title">🌊 IEEE 754 Single-Precision Float (32-bit)</div>
+          <div class="sp-row"><span class="clabel">Float</span><input class="conv-inp sp-inp" id="ieeeIn" placeholder="3.14159"><button id="btnIeee">Analyze</button></div>
+          <div id="ieeeResult" class="sp-out"></div>
+        </div>
+
+      </div><!-- /sp-grid -->
+    </div><!-- /ctab-special -->
+
+  </div><!-- /calc-box -->
+</div><!-- /calcModal -->
+
 <script src="script.js"></script>
 </body>
 </html>

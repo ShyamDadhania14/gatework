@@ -766,3 +766,452 @@ document.getElementById('fileImport').onchange=e=>{const file=e.target.files[0];
   wires.push({id:uid('w'),from:{node:nNOT.id,pin:0},to:{node:nOUT.id,pin:0}});
   drawWires();runSimulation();refreshSavedList();
 })();
+
+
+/* ═══════════════════════════════════════════════════════════════
+   NUMBER SYSTEM CALCULATOR
+═══════════════════════════════════════════════════════════════ */
+(function initCalc() {
+
+  /* ── Open / Close ── */
+  let calcOpen = false;
+  let calcMinimized = false;
+
+  document.getElementById('btnCalc').onclick = () => {
+    calcOpen = !calcOpen;
+    document.getElementById('calcModal').classList.toggle('hidden', !calcOpen);
+    if (calcOpen) { calcMinimized = false; showCalcBody(true); }
+  };
+  document.getElementById('calcClose').onclick = () => {
+    calcOpen = false;
+    document.getElementById('calcModal').classList.add('hidden');
+  };
+  document.getElementById('calcMin').onclick = () => {
+    calcMinimized = !calcMinimized;
+    showCalcBody(!calcMinimized);
+  };
+  function showCalcBody(show) {
+    document.getElementById('calcTabsBody').style.display = show ? '' : 'none';
+    document.querySelectorAll('.ctab-body').forEach(el => { if (!el.classList.contains('hidden') || show) el.style.display = show ? '' : 'none'; });
+    if (show) switchCalcTab(activeCalcTab);
+  }
+
+  /* ── Draggable ── */
+  const box = document.getElementById('calcBox');
+  const hdr = document.getElementById('calcDragHdr');
+  let dragging = false, dx = 0, dy = 0;
+  hdr.addEventListener('mousedown', e => {
+    if (e.target.tagName === 'BUTTON') return;
+    dragging = true;
+    const r = box.getBoundingClientRect();
+    dx = e.clientX - r.left; dy = e.clientY - r.top;
+    box.style.transform = 'none';
+  });
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    box.style.left = (e.clientX - dx) + 'px';
+    box.style.top  = (e.clientY - dy) + 'px';
+  });
+  document.addEventListener('mouseup', () => { dragging = false; });
+
+  /* ── Tabs ── */
+  let activeCalcTab = 'conv';
+  document.querySelectorAll('.ctab').forEach(btn => {
+    btn.onclick = () => switchCalcTab(btn.dataset.tab);
+  });
+  function switchCalcTab(tab) {
+    activeCalcTab = tab;
+    document.querySelectorAll('.ctab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    document.querySelectorAll('.ctab-body').forEach(b => {
+      const match = b.id === 'ctab-' + tab;
+      b.classList.toggle('hidden', !match);
+    });
+  }
+
+  /* ════════════════════════════════════════════════
+     TAB 1 — BASE CONVERTER
+  ════════════════════════════════════════════════ */
+  let bitWidth = 8;
+  let convSigned = false;
+  let currentVal = 0n; // BigInt
+  const MAX = () => convSigned ? (1n << BigInt(bitWidth - 1)) - 1n : (1n << BigInt(bitWidth)) - 1n;
+  const MIN = () => convSigned ? -(1n << BigInt(bitWidth - 1)) : 0n;
+  const MASK = () => (1n << BigInt(bitWidth)) - 1n;
+
+  /* Bit-width buttons */
+  document.getElementById('bwBtns').onclick = e => {
+    const bw = e.target.dataset.bw;
+    if (!bw) return;
+    bitWidth = parseInt(bw);
+    document.querySelectorAll('#bwBtns button').forEach(b => b.classList.toggle('bw-active', b.dataset.bw === bw));
+    clampAndRender(currentVal);
+  };
+  document.getElementById('calcSigned').onchange = e => {
+    convSigned = e.target.checked;
+    clampAndRender(currentVal);
+  };
+  document.getElementById('btnConvClear').onclick = () => {
+    currentVal = 0n;
+    renderConv(0n);
+  };
+
+  /* Input fields */
+  function setupInput(id, base) {
+    document.getElementById(id).addEventListener('input', e => {
+      const raw = e.target.value.trim().toUpperCase().replace(/\s/g, '');
+      if (!raw) { currentVal = 0n; renderConv(0n, id); return; }
+      try {
+        let v;
+        if (base === 10) v = BigInt(raw.replace(/,/g, ''));
+        else v = BigInt('0x' + raw.toString(base === 16 ? '' : (base === 8 ? '' : '')) );
+        if (base === 2)  v = BigInt('0b' + raw);
+        if (base === 8)  v = BigInt('0o' + raw);
+        if (base === 10) v = BigInt(raw);
+        if (base === 16) v = BigInt('0x' + raw);
+        clampAndRender(v, id);
+      } catch { /* invalid — keep showing */ }
+    });
+  }
+  setupInput('cDec', 10);
+  setupInput('cBin', 2);
+  setupInput('cOct', 8);
+  setupInput('cHex', 16);
+
+  function clampAndRender(v, skipId) {
+    const mask = MASK();
+    // Wrap into unsigned bit-width range first
+    let uv = ((v % (mask + 1n)) + (mask + 1n)) % (mask + 1n);
+    currentVal = uv;
+    renderConv(uv, skipId);
+  }
+
+  function renderConv(uv, skipId) {
+    const mask = MASK();
+    const bw = bitWidth;
+
+    // Signed interpretation
+    let signed = uv;
+    if (convSigned && uv >= (1n << BigInt(bw - 1))) {
+      signed = uv - (1n << BigInt(bw));
+    }
+
+    const decStr  = convSigned ? signed.toString() : uv.toString();
+    const binStr  = uv.toString(2).padStart(bw, '0');
+    const octStr  = uv.toString(8);
+    const hexStr  = uv.toString(16).toUpperCase();
+
+    if (skipId !== 'cDec') document.getElementById('cDec').value = decStr;
+    if (skipId !== 'cBin') document.getElementById('cBin').value = binStr;
+    if (skipId !== 'cOct') document.getElementById('cOct').value = octStr;
+    if (skipId !== 'cHex') document.getElementById('cHex').value = hexStr;
+
+    // 1's complement (flip bits within bitWidth)
+    const ones = mask ^ uv;
+    document.getElementById('comp1').textContent = ones.toString(2).padStart(bw, '0');
+
+    // 2's complement
+    const twos = (mask ^ uv) + 1n;
+    const twosDisp = (twos & mask).toString(2).padStart(bw, '0');
+    document.getElementById('comp2').textContent = twosDisp;
+
+    // Gray code
+    const gray = uv ^ (uv >> 1n);
+    document.getElementById('grayDisp').textContent = gray.toString(2).padStart(bw, '0');
+
+    // MSB / LSB
+    document.getElementById('msbDisp').textContent = binStr[0] || '0';
+    document.getElementById('lsbDisp').textContent = binStr[binStr.length - 1] || '0';
+
+    // Set bits count
+    let setBit = 0;
+    for (let i = 0; i < bw; i++) if ((uv >> BigInt(i)) & 1n) setBit++;
+    document.getElementById('setBits').textContent = setBit + ' / ' + bw;
+
+    // Signed value
+    document.getElementById('signedVal').textContent = signed.toString();
+    document.getElementById('magnVal').textContent = (signed < 0n ? -signed : signed).toString();
+
+    // Bit grid
+    renderBitGrid(binStr);
+  }
+
+  function renderBitGrid(binStr) {
+    const bw = bitWidth;
+    const grid = document.getElementById('bitGrid');
+    grid.innerHTML = '';
+    for (let i = 0; i < bw; i++) {
+      // Add separator every 4 bits (except at start)
+      if (i > 0 && i % 4 === 0) {
+        const sep = document.createElement('div');
+        sep.className = 'bit-group-sep'; grid.appendChild(sep);
+      }
+      const cell = document.createElement('div');
+      const bit = binStr[i] === '1' ? 1 : 0;
+      cell.className = 'bit-cell ' + (bit ? 'b1' : 'b0');
+      cell.textContent = bit;
+      const pos = bw - 1 - i;
+      cell.title = `Bit ${pos} (2^${pos} = ${(2n ** BigInt(pos)).toString()})`;
+      cell.onclick = () => {
+        const toggled = currentVal ^ (1n << BigInt(pos));
+        clampAndRender(toggled);
+      };
+      // Index label
+      const idx = document.createElement('span');
+      idx.className = 'bit-idx'; idx.textContent = pos;
+      cell.appendChild(idx);
+      grid.appendChild(cell);
+    }
+  }
+
+  /* Copy buttons */
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.onclick = () => {
+      const val = document.getElementById(btn.dataset.copy)?.value || '';
+      navigator.clipboard.writeText(val).then(() => {
+        const orig = btn.textContent; btn.textContent = '✓'; btn.style.color = 'var(--trace)';
+        setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 900);
+      });
+    };
+  });
+
+  // Initial render
+  renderConv(0n);
+
+  /* ════════════════════════════════════════════════
+     TAB 2 — ARITHMETIC
+  ════════════════════════════════════════════════ */
+  let arithBase = 10;
+  let arithOp = '+';
+
+  document.getElementById('arithBaseBtns').onclick = e => {
+    const base = e.target.dataset.base;
+    if (!base) return;
+    arithBase = parseInt(base);
+    document.querySelectorAll('#arithBaseBtns button').forEach(b => b.classList.toggle('bw-active', b.dataset.base === base));
+  };
+  document.getElementById('opGrid').onclick = e => {
+    const op = e.target.dataset.op;
+    if (!op) return;
+    arithOp = op;
+    document.querySelectorAll('.op-btn').forEach(b => b.classList.toggle('active', b.dataset.op === op));
+  };
+
+  document.getElementById('btnArith').onclick = () => {
+    const rawA = document.getElementById('aA').value.trim().toUpperCase().replace(/\s/g,'');
+    const rawB = document.getElementById('aB').value.trim().toUpperCase().replace(/\s/g,'');
+    const res  = document.getElementById('arithResult');
+    if (!rawA) { res.innerHTML = '<p class="empty-note">Enter operand A.</p>'; return; }
+
+    let a, b;
+    try {
+      if (arithBase === 2)  a = BigInt('0b' + rawA);
+      else if (arithBase === 8)  a = BigInt('0o' + rawA);
+      else if (arithBase === 16) a = BigInt('0x' + rawA);
+      else a = BigInt(rawA);
+    } catch { res.innerHTML = '<p class="empty-note">Invalid Operand A for this base.</p>'; return; }
+
+    if (arithOp !== 'NOT') {
+      try {
+        if (!rawB && (arithOp === 'SHL' || arithOp === 'SHR')) b = 1n;
+        else if (!rawB) { res.innerHTML = '<p class="empty-note">Enter operand B.</p>'; return; }
+        else {
+          if (arithBase === 2)  b = BigInt('0b' + rawB);
+          else if (arithBase === 8)  b = BigInt('0o' + rawB);
+          else if (arithBase === 16) b = BigInt('0x' + rawB);
+          else b = BigInt(rawB);
+        }
+      } catch { res.innerHTML = '<p class="empty-note">Invalid Operand B for this base.</p>'; return; }
+    }
+
+    let result;
+    let errMsg = '';
+    try {
+      switch (arithOp) {
+        case '+':   result = a + b; break;
+        case '-':   result = a - b; break;
+        case '*':   result = a * b; break;
+        case '/':   if (b === 0n) { errMsg = 'Division by zero'; break; } result = a / b; break;
+        case '%':   if (b === 0n) { errMsg = 'Modulo by zero'; break; }  result = a % b; break;
+        case 'AND': result = a & b; break;
+        case 'OR':  result = a | b; break;
+        case 'XOR': result = a ^ b; break;
+        case 'NOT': result = ~a; break;
+        case 'SHL': result = a << b; break;
+        case 'SHR': result = a >> b; break;
+        case 'POW': result = a ** b; break;
+      }
+    } catch(e) { errMsg = e.message; }
+    if (errMsg) { res.innerHTML = `<p class="empty-note">⚠ ${errMsg}</p>`; return; }
+    if (result === undefined) { res.innerHTML = ''; return; }
+
+    const absR = result < 0n ? -result : result;
+    const sign  = result < 0n ? '-' : '';
+    const rDec  = result.toString();
+    const rBin  = sign + absR.toString(2);
+    const rOct  = sign + absR.toString(8);
+    const rHex  = sign + absR.toString(16).toUpperCase();
+
+    // Build step display for simple ops
+    let stepsHtml = '';
+    if (['+','-','*'].includes(arithOp) && absR < 2n ** 64n) {
+      const aBin = (a < 0n ? '-' : '') + (a < 0n ? (-a) : a).toString(2);
+      const bBin = (b < 0n ? '-' : '') + (b < 0n ? (-b) : b).toString(2);
+      stepsHtml = `Binary step:\n  A = ${aBin}\n  B = ${bBin}\n  ${arithOp} = ${rBin}`;
+    }
+
+    res.innerHTML = `
+      <table class="arith-res-table">
+        <tr><th>Base</th><th>A</th><th>Op</th><th>B</th><th>Result</th></tr>
+        <tr><td>DEC</td><td class="val">${a.toString()}</td><td>${arithOp}</td><td class="val">${b !== undefined ? b.toString() : '—'}</td><td class="val">${rDec}</td></tr>
+        <tr><td>BIN</td><td class="val">${(a < 0n ? '-' : '') + (a<0n?-a:a).toString(2)}</td><td>${arithOp}</td><td class="val">${b !== undefined ? ((b<0n?'-':'')+(b<0n?-b:b).toString(2)) : '—'}</td><td class="val">${rBin}</td></tr>
+        <tr><td>OCT</td><td class="val">${(a < 0n ? '-' : '') + (a<0n?-a:a).toString(8)}</td><td>${arithOp}</td><td class="val">${b !== undefined ? ((b<0n?'-':'')+(b<0n?-b:b).toString(8)) : '—'}</td><td class="val">${rOct}</td></tr>
+        <tr><td>HEX</td><td class="val">${(a < 0n ? '-' : '') + (a<0n?-a:a).toString(16).toUpperCase()}</td><td>${arithOp}</td><td class="val">${b !== undefined ? ((b<0n?'-':'')+(b<0n?-b:b).toString(16).toUpperCase()) : '—'}</td><td class="val">${rHex}</td></tr>
+      </table>
+      ${stepsHtml ? `<div class="steps-box">${stepsHtml}</div>` : ''}
+    `;
+  };
+  document.getElementById('aB').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('btnArith').click(); });
+
+  /* ════════════════════════════════════════════════
+     TAB 3 — SPECIAL CODES
+  ════════════════════════════════════════════════ */
+
+  /* Gray Code */
+  document.getElementById('btnBinGray').onclick = () => {
+    const bin = document.getElementById('gBin').value.trim();
+    if (!/^[01]+$/.test(bin)) { document.getElementById('grayOut').textContent = '⚠ Enter valid binary'; return; }
+    let v = BigInt('0b' + bin);
+    const gray = v ^ (v >> 1n);
+    const gStr = gray.toString(2).padStart(bin.length, '0');
+    document.getElementById('grayOut').textContent = `Binary ${bin}  →  Gray ${gStr}`;
+  };
+  document.getElementById('btnGrayBin').onclick = () => {
+    const gray = document.getElementById('gGray').value.trim();
+    if (!/^[01]+$/.test(gray)) { document.getElementById('grayOut').textContent = '⚠ Enter valid gray code'; return; }
+    let gv = BigInt('0b' + gray);
+    let mask = gv;
+    while (mask > 0n) { mask >>= 1n; gv ^= mask; }
+    document.getElementById('grayOut').textContent = `Gray ${gray}  →  Binary ${gv.toString(2).padStart(gray.length,'0')}`;
+  };
+
+  /* BCD */
+  document.getElementById('btnBcd').onclick = () => {
+    const dec = document.getElementById('bcdIn').value.trim();
+    if (!/^\d+$/.test(dec)) { document.getElementById('bcdOut').textContent = '⚠ Enter a positive integer'; return; }
+    const groups = [...dec].map(d => parseInt(d).toString(2).padStart(4,'0'));
+    document.getElementById('bcdOut').textContent = `BCD: ${groups.join(' ')}  (${groups.length * 4} bits)`;
+  };
+  document.getElementById('btnBcdDec').onclick = () => {
+    const raw = document.getElementById('bcdBin').value.trim().replace(/\s/g,'');
+    if (!/^[01]+$/.test(raw) || raw.length % 4 !== 0) { document.getElementById('bcdOut').textContent = '⚠ Enter groups of 4 bits'; return; }
+    let result = '';
+    for (let i = 0; i < raw.length; i += 4) {
+      const nibble = parseInt(raw.slice(i, i+4), 2);
+      if (nibble > 9) { document.getElementById('bcdOut').textContent = `⚠ Nibble ${raw.slice(i,i+4)} (=${nibble}) is not a valid BCD digit (0-9)`; return; }
+      result += nibble;
+    }
+    document.getElementById('bcdOut').textContent = `BCD ${raw} → Decimal ${result}`;
+  };
+
+  /* ASCII */
+  document.getElementById('btnAscii').onclick = () => {
+    let code = -1;
+    const charVal = document.getElementById('asciiChar').value;
+    const decVal  = document.getElementById('asciiDec').value.trim();
+    if (charVal) code = charVal.charCodeAt(0);
+    else if (decVal) code = parseInt(decVal);
+    if (isNaN(code) || code < 0 || code > 127) { document.getElementById('asciiResult').innerHTML = '<span style="color:var(--red)">⚠ Enter a char (0–127) or its decimal code.</span>'; return; }
+    const ch = code >= 32 && code < 127 ? String.fromCharCode(code) : '[ctrl]';
+    const near = [];
+    for (let i = Math.max(0, code-4); i <= Math.min(127, code+4); i++) {
+      const c = i >= 32 && i < 127 ? String.fromCharCode(i) : '[ctrl]';
+      near.push(`<div class="ascii-cell${i===code?' selected':''}"><div class="ak">${c}</div><div class="av">${i} / 0x${i.toString(16).toUpperCase()} / ${i.toString(2).padStart(8,'0')}</div></div>`);
+    }
+    document.getElementById('asciiResult').innerHTML = `
+      <div style="margin-bottom:6px">
+        <b style="color:var(--trace);font-size:18px">'${ch}'</b>
+        &nbsp; DEC: <span class="cval">${code}</span>
+        &nbsp; HEX: <span class="cval">0x${code.toString(16).toUpperCase()}</span>
+        &nbsp; OCT: <span class="cval">0${code.toString(8)}</span>
+        &nbsp; BIN: <span class="cval">${code.toString(2).padStart(8,'0')}</span>
+      </div>
+      <div class="ascii-grid">${near.join('')}</div>
+    `;
+  };
+
+  /* Excess-N */
+  document.getElementById('btnExcess').onclick = () => {
+    const dec = parseInt(document.getElementById('excessDec').value.trim());
+    const N   = parseInt(document.getElementById('excessN').value.trim()) || 128;
+    if (isNaN(dec)) { document.getElementById('excessOut').textContent = '⚠ Enter a decimal value'; return; }
+    const encoded = dec + N;
+    const bits = Math.ceil(Math.log2(N * 2 + 1)) || 8;
+    document.getElementById('excessOut').textContent =
+      `${dec} + ${N} = ${encoded}  →  Binary: ${encoded.toString(2).padStart(bits,'0')}  |  Hex: ${encoded.toString(16).toUpperCase()}`;
+  };
+
+  /* Hamming Weight & Distance */
+  document.getElementById('btnHam').onclick = () => {
+    const a = document.getElementById('hamA').value.trim();
+    const b = document.getElementById('hamB').value.trim();
+    if (!/^[01]+$/.test(a) || !/^[01]+$/.test(b)) { document.getElementById('hamOut').textContent = '⚠ Enter valid binary strings'; return; }
+    const maxLen = Math.max(a.length, b.length);
+    const ap = a.padStart(maxLen, '0');
+    const bp = b.padStart(maxLen, '0');
+    let wA = 0, wB = 0, dist = 0;
+    for (let i = 0; i < maxLen; i++) {
+      if (ap[i] === '1') wA++;
+      if (bp[i] === '1') wB++;
+      if (ap[i] !== bp[i]) dist++;
+    }
+    const xorStr = [...ap].map((bit, i) => bit !== bp[i] ? '1' : '0').join('');
+    document.getElementById('hamOut').textContent =
+      `Weight(A) = ${wA}  |  Weight(B) = ${wB}\nHamming Distance = ${dist}\nXOR = ${xorStr}`;
+  };
+
+  /* IEEE 754 */
+  document.getElementById('btnIeee').onclick = () => {
+    const val = parseFloat(document.getElementById('ieeeIn').value.trim());
+    const res = document.getElementById('ieeeResult');
+    if (isNaN(val)) { res.innerHTML = '<span style="color:var(--red)">⚠ Enter a valid float</span>'; return; }
+
+    const buf = new ArrayBuffer(4);
+    new DataView(buf).setFloat32(0, val, false);
+    const bits = [...new Uint8Array(buf)].map(b => b.toString(2).padStart(8,'0')).join('');
+
+    const sign    = bits[0];
+    const expBits = bits.slice(1, 9);
+    const manBits = bits.slice(9);
+    const expVal  = parseInt(expBits, 2);
+    const bias    = 127;
+    const expReal = expVal - bias;
+    const manFrac = parseInt(manBits, 2) / (2 ** 23);
+    const manReal = expVal === 0 ? manFrac : 1 + manFrac;
+
+    let special = '';
+    if (expVal === 255 && parseInt(manBits,2) !== 0) special = 'NaN';
+    else if (expVal === 255) special = sign === '0' ? '+Infinity' : '-Infinity';
+    else if (expVal === 0 && parseInt(manBits,2) === 0) special = 'Zero';
+
+    const signHTML = `<div class="ieee-bit ieee-sign">${sign}</div>`;
+    const expHTML  = [...expBits].map(b => `<div class="ieee-bit ieee-exp">${b}</div>`).join('');
+    const manHTML  = [...manBits].map(b => `<div class="ieee-bit ieee-man">${b}</div>`).join('');
+
+    res.innerHTML = `
+      <div class="ieee-bits">${signHTML}${expHTML}${manHTML}</div>
+      <div class="ieee-legend">
+        <div class="ieee-lbl"><span style="background:#3a1010;border:1px solid #5a2020"></span> Sign (1 bit)</div>
+        <div class="ieee-lbl"><span style="background:#1a2a10;border:1px solid #2a4a20"></span> Exponent (8 bits)</div>
+        <div class="ieee-lbl"><span style="background:#10182a;border:1px solid #203060"></span> Mantissa (23 bits)</div>
+      </div>
+      <div style="margin-top:8px;font-size:10px;line-height:1.9;color:var(--text-dim)">
+        Sign:       <span class="cval">${sign === '0' ? '+' : '−'}</span><br>
+        Exp bits:   <span class="cval">${expBits}</span>  =  ${expVal}  (biased)  →  real exponent = ${expVal} − 127 = <span class="cval">${expReal}</span><br>
+        Mantissa:   <span class="cval">${manBits}</span><br>
+        Value:      <span class="cval">${special || val}</span>   =  ${sign==='0'?'':'-'}${manReal} × 2^${expReal}
+        ${special ? `<br>⚠ Special value: <span style="color:var(--red)">${special}</span>` : ''}
+      </div>
+    `;
+  };
+
+})(); // end initCalc
