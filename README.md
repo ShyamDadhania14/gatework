@@ -23,7 +23,7 @@
 
 <br>
 
-[🚀 **Open it**](#-getting-started) · [✨ **Features**](#-what-this-thing-does) · [🧮 **Calculator**](#-number-system-calculator) · [🔌 **Gates**](#-supported-gates) · [📐 **Circuits**](#-circuit-building)
+[🚀 **Open it**](#-https://gatework.onrender.com/) · [✨ **Features**](#-what-this-thing-does) · [🧮 **Calculator**](#-number-system-calculator) · [🔌 **Gates**](#-supported-gates) · [📐 **Circuits**](#-circuit-building)
 
 </div>
 
@@ -178,20 +178,20 @@ Click **🔢 Calculator** in the header for a draggable floating calculator with
 ### ⇄ Tab 1 — Base Converter
 
 ```
-┌─────────────────────────────────────────────────┐
-│  Bit Width: [ 4 ] [ 8★] [16 ] [32 ] [64 ]  ☐ Signed
-├─────────────────────────────────────────────────┤
-│  DEC  │  255                               [⎘]  │
-│  BIN  │  11111111                          [⎘]  │
-│  OCT  │  377                               [⎘]  │
-│  HEX  │  FF                                [⎘]  │
-├─────────────────────────────────────────────────┤
-│  [1][1][1][1] [1][1][1][1]  ← clickable bits   │
-│   7  6  5  4    3  2  1  0  ← bit positions     │
-├─────────────────────────────────────────────────┤
-│  1's Comp │ 2's Comp │ Gray Code │ MSB │ LSB   │
-│  Set Bits │ Signed   │ Magnitude │     │        │
-└─────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────┐
+│  Bit Width: [ 4 ] [ 8★] [16 ] [32 ] [64 ]  ☐ Signed │
+├──────────────────────────────────────────────────────┤
+│  DEC  │  255                               [⎘]       │
+│  BIN  │  11111111                          [⎘]       │
+│  OCT  │  377                               [⎘]       │
+│  HEX  │  FF                                [⎘]       │
+├──────────────────────────────────────────────────────┤
+│  [1][1][1][1] [1][1][1][1]  ← clickable bits         │
+│   7  6  5  4    3  2  1  0  ← bit positions          │
+├──────────────────────────────────────────────────────┤
+│  1's Comp │ 2's Comp │ Gray Code │ MSB │ LSB         │
+│  Set Bits │ Signed   │ Magnitude │     │             │
+└──────────────────────────────────────────────────────┘
 ```
 
 - Type in **any** field → all others update instantly
@@ -262,16 +262,6 @@ Works in any modern browser. Chrome, Firefox, Edge, Safari — all good. No inte
 ---
 
 ## 🎨 Design Language
-
-```
-Background    #0b0f0d   ← almost-black with a hint of green
-Signal HIGH   #39ff8f   ← neon green (the one)
-Accent        #ffb347   ← amber for expressions & labels
-Error / Del   #ff5d5d   ← soft red
-MUX pins      #5db8ff   ← electric blue
-DEMUX pins    #b47aff   ← purple
-Font          Space Mono / Courier New
-```
 
 Built for dark mode. Looks wrong in light mode. That's a feature.
 
@@ -366,19 +356,6 @@ Circuits export as clean JSON:
 ```
 
 Portable, readable, versionable. Commit it to git. Share it in a DM. Whatever.
-
----
-
-## 🔭 What Could Be Next
-
-- [ ] Sequential logic (D flip-flop, SR latch, JK, T)
-- [ ] Clock signal with configurable frequency
-- [ ] Karnaugh map (K-map) minimization
-- [ ] Multi-bit buses (4-bit adder, ALU blocks)
-- [ ] Dark/Light theme toggle (if anyone asks — no one will)
-- [ ] Undo/Redo (Ctrl+Z support)
-- [ ] Circuit screenshot / export as PNG
-- [ ] More calculator tools: CRC, checksum, floating-point arithmetic
 
 ---
 
